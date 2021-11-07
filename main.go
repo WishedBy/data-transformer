@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/WishedBy/data-transformer/pkg/datatransformer"
 	"github.com/WishedBy/data-transformer/pkg/server"
 )
 
@@ -45,12 +46,13 @@ func main() {
 	}()
 
 	cfg := configure()
-	runServer(cfg)
+
+	runServer(cfg, &datatransformer.DataTransformerManager{})
 
 	<-done
 }
 
-func runServer(cfg config) *server.Server {
+func runServer(cfg config, mngr *datatransformer.DataTransformerManager) *server.Server {
 	srv := &server.Server{Port: cfg.port}
 
 	srv.AddHandler("/", server.GET, func(response http.ResponseWriter, request *http.Request) {
